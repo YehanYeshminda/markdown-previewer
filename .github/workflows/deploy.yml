@@ -1,4 +1,4 @@
-name: Deploy to Netlify on Push to Main
+name: Build & Deploy Angular to Netlify
 
 on:
   push:
@@ -11,5 +11,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Deploy Site to Netlify
-        run: curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_HOOK }}
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build Angular App
+        run: npm run build
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          netlify deploy \
+            --dir=dist/mardown-previewer/browser \
+            --site=${{ secrets.NETLIFY_SITE_ID }} \
+            --prod
