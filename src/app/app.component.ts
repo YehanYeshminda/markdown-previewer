@@ -7,7 +7,7 @@ import { TemplateService, Template } from './services/template.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-  title = 'Markdown Previewer Updated After';
+  title = 'Markdown Previewer';
   markdownContent = '';
   isFullscreen = false;
   isDarkTheme = false;
